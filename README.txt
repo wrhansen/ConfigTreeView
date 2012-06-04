@@ -53,9 +53,12 @@ For more information refer to
 
 	For setting up the config file refer to 'HOW_TO_CONFIG_FILE'
 	For creating a custom ConfigTreeView prototype refer to 'HOW_TO_CUSTOM'
-	For example config file structures refer to 'examples/config_example.py'
-	For example using a ConfigTreeView refer to 'examples/using_config_treeview.py'
-	For example of a ConfigTreeView prototype refer to 'examples/custom_treeview.py'
+	For example config file structures refer to:
+		examples/config_example.py
+	For example using a ConfigTreeView refer to:
+		examples/using_config_treeview.py
+	For example of a ConfigTreeView prototype refer to:
+		examples/custom_treeview.py
 
 
 	
