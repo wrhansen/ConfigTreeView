@@ -1,6 +1,6 @@
-==============
-ConfigTreeView
-==============
+====================
+About ConfigTreeView
+====================
 	This is an implementation of a GtkTreeView in python(using pygtk) that
 	allows for easy, fast, and dynamic setting up of a TreeView, its
 	TreeViewColumns and CellRenderers. This ConfigTreeView can create a TreeView

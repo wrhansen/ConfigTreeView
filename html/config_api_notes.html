@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Config Structure &mdash; ConfigTreeView 0.1.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ConfigTreeView 0.1.3 documentation" href="index.html" />
+    <link rel="next" title="HOW-TO: Create a config file" href="how_to_config_file.html" />
+    <link rel="prev" title="Welcome to ConfigTreeView’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="how_to_config_file.html" title="HOW-TO: Create a config file"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to ConfigTreeView’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">ConfigTreeView 0.1.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-config-structure">
+<h1>The Config Structure<a class="headerlink" href="#the-config-structure" title="Permalink to this headline">¶</a></h1>
+<p>We needed something that could initialize the treeview&#8217;s gui components and their
+properties( TreeViewColumn, CellRenderer, and the TreeView itself ), but also
+have an insight into what each renderer is expecting of the data( for setting up
+cell-specific renderer properties, or which data it&#8217;s going to display) without
+having to specifically define the actual indices into the data that these
+components are searching for( the treeview will be able to handle that internally
+upon initialization using the config file)</p>
+<div class="section" id="complete-structure-with-every-possible-key">
+<h2>Complete Structure, with every possible key:<a class="headerlink" href="#complete-structure-with-every-possible-key" title="Permalink to this headline">¶</a></h2>
+<p>Note: This structure details every possible key or key arrangement for
+the sake of it. It can appear to be complex and overwhelming at first glance,
+but don&#8217;t fret. If a key that isn&#8217;t required isn&#8217;t used at all for the
+ConfigTreeView you want to build, then don&#8217;t have to include that key. This
+applies to top-level keys as well. This functionality allows the user
+to rapidly and easily build TreeViews.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="p">{</span>
+        <span class="s">&quot;treeview&quot;</span><span class="p">:{</span>
+                <span class="s">&quot;properties&quot;</span><span class="p">:{</span> <span class="c">#This struct will contain all treeview properties---meaning things that can be set using `treeview.set_property( property, value)`</span>
+                        <span class="s">&quot;rules-hint&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span><span class="c">#&lt;---A property of GtkTreeView</span>
+                        <span class="s">&quot;headers-clickable&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="c">#Positional arguments to send to a custom ConfigTreeView--can be indices, or custom values</span>
+                        <span class="s">&quot;$index.record_open_bool&quot;</span><span class="p">,</span> <span class="c">#This is how you assign an index as an argument to the ConfigTreeView</span>
+                        <span class="s">&quot;$index.column_one.1.markup&quot;</span><span class="p">,</span> <span class="c">#An example assigning an index from a column that has multiple renderers--a number in a &#39;dotted&#39; string represents the index in the list of renderers</span>
+                <span class="p">],</span>
+                <span class="s">&quot;kwargs&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="c">#Keyword arguments to send to a custom ConfigTreeView--same rules as &quot;args&quot;</span>
+                <span class="s">&#39;bg&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="c">#Set background color, bg-even and bg-odd override this option</span>
+                <span class="s">&#39;bg-even&#39;</span><span class="p">:</span> <span class="s">&#39;#A2C879&#39;</span><span class="p">,</span> <span class="c">#Set even-row background color...must be accompanied by bg-odd</span>
+                <span class="s">&#39;bg-odd&#39;</span><span class="p">:</span> <span class="s">&#39;#6794AB&#39;</span><span class="p">,</span> <span class="c">#Set odd-row background color...must be accompanied by bg-even</span>
+                <span class="s">&#39;selection-mode&#39;</span><span class="p">:</span> <span class="s">&#39;SELECTION_SINGLE&#39;</span><span class="p">,</span> <span class="c">#The selection mode of the TreeView...must be one of SELECTION_NONE, SELECTION_SINGLE, SELECTION_BROWSE, SELECTION_MULTIPLE</span>
+                <span class="s">&#39;selection-color&#39;</span><span class="p">:</span> <span class="s">&#39;#bfd3e7&#39;</span><span class="p">,</span> <span class="c">#Change the color of the selection bar--value can be a valid color name or hex string</span>
+        <span class="p">},</span>
+        <span class="s">&quot;treemodel&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c">#You can tell the TreeView to build you a custom TreeModel(via the get_treemodel() function)</span>
+                <span class="s">&quot;class&quot;</span><span class="p">:</span> <span class="s">&quot;CustomTreeModelClass&quot;</span><span class="p">,</span> <span class="c">#Your custom GtkTreeModel implementation</span>
+                <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="c">#The positional arguments to send to the class&#39; _handle_args method</span>
+                <span class="s">&quot;kwargs&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="c">#The keyword arguments to send to the class&#39; _handle_args method</span>
+        <span class="p">},</span>
+        <span class="s">&quot;index_names&quot;</span><span class="p">:{</span> <span class="c">#Maps the given index into the type of data it will store</span>
+                <span class="s">&quot;record_open_bool&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="c">#This is how you define a type of &#39;bool&#39; for an index that will be used by more than one column&#39;s renderer</span>
+                <span class="s">&quot;order_status&quot;</span><span class="p">:{</span> <span class="c">#This is how you specifically define types for a certain column(that contains only a single CellRenderer)</span>
+                        <span class="s">&quot;markup&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="c">#The `markup` property of the cell renderer</span>
+                <span class="p">},</span>
+                <span class="s">&quot;column_one&quot;</span><span class="p">:[</span> <span class="c">#This is how you define types for columns with multiple renderers</span>
+                        <span class="p">{</span> <span class="s">&quot;markup&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="s">&quot;cell-background&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">},</span>
+                        <span class="p">{</span> <span class="s">&quot;pixbuf&quot;</span><span class="p">:</span> <span class="s">&quot;gtk.gdk.Pixbuf&quot;</span><span class="p">},</span>
+                <span class="p">],</span>
+        <span class="p">},</span>
+        <span class="s">&quot;column_order&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;column_one&#39;</span><span class="p">,</span> <span class="s">&#39;order_status&#39;</span><span class="p">],</span> <span class="c">#Define the order the columns are appended in the treeview. List the column names in the order you want them appended to the TreeView</span>
+        <span class="s">&quot;macros&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c">#Define macros--a convenience for assiging the same properties to multiple columns or renderers</span>
+                <span class="s">&quot;col-default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s">&quot;expand&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                        <span class="s">&quot;resizable&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                        <span class="s">&quot;clickable&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                        <span class="s">&quot;reorderable&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">&quot;columns&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;column_one&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c">#A column named &quot;column_one&quot;--the name is used when determing: where columns go in the TreeView, which indices a column&#39;s renderers will use, and their types</span>
+                        <span class="s">&quot;macros&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;col-default&quot;</span><span class="p">],</span> <span class="c">#Assign a macro( by name )</span>
+                        <span class="s">&#39;header&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c">#This struct contains information to create the header for this column. A header can be a string or a custom widget. Defaults to do nothing</span>
+                                <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;Column1&#39;</span><span class="p">,</span> <span class="c">#A simple text label displaying the title(This is a fallback to the custom widget)</span>
+                                <span class="s">&#39;module&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="c">#The module that contains the header widget, None defaults to the gtk module</span>
+                                <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;Button&#39;</span><span class="p">,</span> <span class="c">#A string of the class( must inherit gtk.Widget), to set the header widget to. None defaults to gtk.Label(If &#39;title&#39; key isn&#39;t present)</span>
+                                <span class="s">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="c">#Positional arguments to pass to &#39;class&#39;</span>
+                                <span class="s">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="c">#Keyword arguments to pass to &#39;class&#39;</span>
+                        <span class="p">},</span>
+                        <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c">#This struct will contain all TreeViewColumn properties that can be set using treeviewcolumn.set_property(property, value)</span>
+                                <span class="s">&quot;resizable&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                                <span class="s">&quot;visible&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                                <span class="s">&quot;max-width&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+                        <span class="p">},</span>
+                        <span class="s">&quot;renderers&quot;</span><span class="p">:[</span> <span class="c">#Create the Renderers( use a list if multiple renderers in one column)</span>
+                                <span class="p">{</span>
+                                        <span class="s">&#39;pack&#39;</span><span class="p">:</span> <span class="s">&#39;pack_start&#39;</span><span class="p">,</span> <span class="c">#Either &#39;pack_start&#39; or &#39;pack_end&#39;, if this is None, defaults to pack_start</span>
+                                        <span class="s">&#39;expand&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="c">#Sets the packing method &#39;expand&#39; property, if this is None, defaults to True</span>
+                                        <span class="s">&#39;module&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="c">#The module that contains the renderer, None if it&#39;s in the gtk module</span>
+                                        <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;CellRendererText&#39;</span><span class="p">,</span> <span class="c">#A string name of the  CellRenderer class to use( must inherit gtk.CellRenderer )...if this is None, defaults to gtk.CellRendererText</span>
+                                        <span class="s">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="c">#Positional arugments to pass to &#39;class&#39;, if None, don&#39;t pass args to &#39;class&#39;</span>
+                                        <span class="s">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="c">#Keyword arguments to pass to &#39;class&#39;, if None don&#39;t pass kwargs to &#39;class&#39;</span>
+                                        <span class="s">&#39;properties&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c">#This struct contains all properties that each row will have by using cellrenderer.set_property( property, value), if &#39;properties&#39; doesn&#39;t exist(or None), then no props set.</span>
+                                                <span class="s">&#39;height&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+                                                <span class="s">&#39;xpad&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                                                <span class="s">&#39;font&#39;</span><span class="p">:</span> <span class="s">&#39;Times New Roman 13&#39;</span><span class="p">,</span>
+                                        <span class="p">},</span>
+                                        <span class="s">&#39;indices&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c">#This struct contains all properties that are set from the treemodel data...using column.add(attribute,property, index), None sets no attributes</span>
+                                                <span class="c">#These indices are determined at runtime when the ConfigTreeView is initialized.</span>
+                                                <span class="c">#You can either set them by assigning them a name( if one index will be shared by multiple renderers)</span>
+                                                <span class="c">#       NOTE: You must assign by a name that exists in the &#39;index_names&#39; key of this configuration file</span>
+                                                <span class="c">#Or you can set them by setting a property value to True, telling the TreeView that this one is unique</span>
+                                                <span class="s">&quot;markup&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="c">#This CellRendererText needs its own &#39;markup&#39; index in the data model</span>
+                                                <span class="s">&quot;cell-background-set&quot;</span><span class="p">:</span> <span class="s">&quot;record_open_bool&quot;</span>       <span class="c">#All columns will share this index</span>
+
+                                        <span class="p">}</span>
+                                <span class="p">},</span>
+                                <span class="p">{</span> <span class="c">#The second renderer in the &quot;column_one&quot; column</span>
+                                        <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;CellRendererPixbuf&#39;</span><span class="p">,</span>
+                                        <span class="s">&#39;indices&#39;</span><span class="p">:</span> <span class="p">{</span>
+                                                <span class="s">&#39;pixbuf&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="c">#This CellRendererPixbuf needs its own &#39;pixbuf&#39; index in the data model</span>
+                                                <span class="s">&#39;cell-background-set&#39;</span><span class="p">:</span> <span class="s">&#39;record_open_bool&#39;</span><span class="p">,</span> <span class="c">#All columns will share this index</span>
+                                        <span class="p">},</span>
+
+                                <span class="p">},</span>
+                        <span class="p">],</span>
+                <span class="p">},</span>
+                <span class="s">&quot;order_status&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c">#Another column, this one named &quot;order_status&quot;</span>
+                        <span class="s">&#39;header&#39;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;Order Status&#39;</span><span class="p">,</span>
+                        <span class="p">},</span>
+                        <span class="s">&#39;properties&#39;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s">&#39;resizable&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                        <span class="p">},</span>
+                        <span class="s">&#39;renderers&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c">#A single renderer can be defined as a single dict instead of as a list</span>
+                                <span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="c">#This CellRendererText needs its own &#39;markup&#39; index in the data model</span>
+                                <span class="s">&#39;cell-background-set&#39;</span><span class="p">:</span> <span class="s">&#39;record_open_bool&#39;</span><span class="c">#All columns will share this index</span>
+                        <span class="p">},</span>
+
+                <span class="p">}</span>
+        <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The Config Structure</a><ul>
+<li><a class="reference internal" href="#complete-structure-with-every-possible-key">Complete Structure, with every possible key:</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to ConfigTreeView&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="how_to_config_file.html"
+                        title="next chapter">HOW-TO: Create a config file</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/config_api_notes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="how_to_config_file.html" title="HOW-TO: Create a config file"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to ConfigTreeView’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">ConfigTreeView 0.1.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Wesley Hansen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

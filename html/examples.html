@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Examples &mdash; ConfigTreeView 0.1.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ConfigTreeView 0.1.3 documentation" href="index.html" />
+    <link rel="prev" title="configtreeview.tools Package" href="configtreeview.tools.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configtreeview.tools.html" title="configtreeview.tools Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">ConfigTreeView 0.1.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>This section details everything you need to get started using <tt class="docutils literal"><span class="pre">ConfigTreeView</span></tt> s.
+This includes an example of how to use the <tt class="docutils literal"><span class="pre">ConfigTreeView</span></tt>, how to create the
+<cite>config</cite> structure and also how to create a custom wrapper to extend its uses
+to fit your needs and finally how to use the <cite>DataFormatter</cite> to get your data
+displayed correctly in the <tt class="docutils literal"><span class="pre">ConfigTreeView</span></tt>.</p>
+<div class="section" id="how-to-use-a-configtreeview">
+<h2>How To Use a <cite>ConfigTreeView</cite><a class="headerlink" href="#how-to-use-a-configtreeview" title="Permalink to this headline">¶</a></h2>
+<p>To use a <cite>ConfigTreeView</cite> is simple. In your python script there are only a couple
+steps you need to follow:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Initialize the <cite>ConfigTreeView</cite> with a config structure</li>
+<li>Apply the configuration to finish initializing the <cite>ConfigTreeView</cite>
+components</li>
+</ol>
+</div></blockquote>
+<p>Example:</p>
+<blockquote>
+<div><div class="code python highlight-python"><div class="highlight"><pre><span class="c">#Import the package</span>
+<span class="kn">from</span> <span class="nn">configtreeview</span> <span class="kn">import</span> <span class="n">ConfigTreeView</span>
+<span class="c">#Create the ConfigTreeView</span>
+<span class="n">my_treeview</span> <span class="o">=</span> <span class="n">ConfigTreeView</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="c">#where `config` is a python dict config structure you already defined</span>
+<span class="c">#Apply the configuration to the TreeView to finish initialization</span>
+<span class="n">my_treeview</span><span class="o">.</span><span class="n">_apply_config</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>As you can see from the example, the API to use a ConfigTreeView is incredibly
+simple. This is possible because the bulk of the work is done in how you define
+and build the <cite>config</cite> structure.</p>
+</div>
+<div class="section" id="how-to-create-build-a-config-structure">
+<h2>How To Create/Build a <cite>config</cite> Structure<a class="headerlink" href="#how-to-create-build-a-config-structure" title="Permalink to this headline">¶</a></h2>
+<p>The config structure itself is just a python <cite>dict</cite> instance that contains the
+information necessary to build all of the interface components for the <cite>ConfigTreeView</cite>.
+For more information on what a <cite>config</cite> structure should look like, refer to
+<a class="reference internal" href="how_to_config_file.html"><em>HOW TO: Config File</em></a></p>
+<p>As an example let&#8217;s say we want a very simple treeview that contains two columns
+that each have a title in their header, and contain a single string as the data
+source for their respective <cite>GtkCellRenderers</cite>. The config structure for such a
+case could look like this:</p>
+<blockquote>
+<div><div class="code python highlight-python"><div class="highlight"><pre><span class="p">{</span>
+        <span class="s">&quot;index_names&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;column_1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">},</span>
+                <span class="s">&#39;column_2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">&quot;column_order&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;column_1&quot;</span><span class="p">,</span> <span class="s">&quot;column_2&quot;</span><span class="p">],</span>
+        <span class="s">&quot;columns&quot;</span><span class="p">:{</span>
+                <span class="s">&quot;column_1&quot;</span><span class="p">:{</span>
+                        <span class="s">&quot;header&quot;</span><span class="p">:{</span>
+                                <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Column1&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s">&quot;renderers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                        <span class="s">&quot;indices&quot;</span><span class="p">:{</span><span class="s">&quot;markup&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+                        <span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s">&quot;column_2&quot;</span><span class="p">:{</span>
+                        <span class="s">&quot;header&quot;</span><span class="p">:{</span>
+                                <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Column2&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s">&quot;renderers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                        <span class="s">&quot;indices&quot;</span><span class="p">:{</span><span class="s">&quot;markup&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+                        <span class="p">}</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="a-custom-configtreeview-implmentation">
+<h2>A Custom <cite>ConfigTreeView</cite> implmentation<a class="headerlink" href="#a-custom-configtreeview-implmentation" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes it is necessary to create your own implementation of a <tt class="docutils literal"><span class="pre">ConfigTreeView</span></tt>.
+This section describes the how? and the why?</p>
+<div class="section" id="why">
+<h3>Why?<a class="headerlink" href="#why" title="Permalink to this headline">¶</a></h3>
+<p>There are many situations in your interface where you may need to subclass the
+<tt class="docutils literal"><span class="pre">ConfigTreeView</span></tt> so as to handle something extra that it doesn&#8217;t cover. One
+common situation that has come up in my own experiences has been with needing
+to know one of the indexes represented in the data model for some dynamic use
+throughout your application. For example: you would like to change the background
+color of a cell in the treeview based on a user clicking on it and to do this
+you need to know which index in a TreeModel row you&#8217;re keeping that property.
+Because of the way the data model is built for use in the <tt class="docutils literal"><span class="pre">ConfigTreeView</span></tt>
+with the actual indices hidden from the developer, this is not immediately an
+easy task.</p>
+</div>
+<div class="section" id="how">
+<h3>How?<a class="headerlink" href="#how" title="Permalink to this headline">¶</a></h3>
+<p>But, fear not, the <tt class="docutils literal"><span class="pre">ConfigTreeView</span></tt> supplies an easy way to get around this.
+To achieve this, you need to do a few things:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Pass the index that you want(in dotted-key notation) to the <cite>args`(or `kwargs</cite>)
+of the <cite>treeview</cite> dict within your config structure.</li>
+<li>Create a custom wrapper class that subclasses <cite>ConfigTreeView</cite></li>
+<li>Make sure you override the <cite>_handle_args</cite> function of <cite>ConfigTreeView</cite>
+that will be used to assign the args you specified in the config structure
+to an attribute of your custom <cite>ConfigTreeView</cite> that you can use.</li>
+</ol>
+</div></blockquote>
+<p>Example: building on from the above sample of a config structure...let&#8217;s add a
+variable to our config that will be used to change the background of a cellrenderer:</p>
+<blockquote>
+<div><div class="code python highlight-python"><div class="highlight"><pre><span class="p">{</span>
+        <span class="s">&quot;treeview&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c">#Added a &#39;treeview&#39; key to supply custom args to our treeview</span>
+                <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;$index.bg_color&#39;</span><span class="p">],</span><span class="c">#Pass the &#39;bg_color&#39; index to our custom treeview</span>
+        <span class="p">},</span>
+        <span class="s">&quot;index_names&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;bg_color&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="s">&#39;column_1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">},</span>
+                <span class="s">&#39;column_2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">&quot;column_order&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;column_1&quot;</span><span class="p">,</span> <span class="s">&quot;column_2&quot;</span><span class="p">],</span>
+        <span class="s">&quot;columns&quot;</span><span class="p">:{</span>
+                <span class="s">&quot;column_1&quot;</span><span class="p">:{</span>
+                        <span class="s">&quot;header&quot;</span><span class="p">:{</span>
+                                <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Column1&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s">&quot;renderers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                        <span class="s">&quot;indices&quot;</span><span class="p">:{</span><span class="s">&quot;markup&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+                        <span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s">&quot;column_2&quot;</span><span class="p">:{</span>
+                        <span class="s">&quot;header&quot;</span><span class="p">:{</span>
+                                <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Column2&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s">&quot;renderers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                        <span class="s">&quot;indices&quot;</span><span class="p">:{</span><span class="s">&quot;markup&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+                        <span class="p">}</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>And then a corresponding custom treeview implementation would look something like
+this:</p>
+<blockquote>
+<div><div class="code python highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">CustomConfigTV</span><span class="p">(</span><span class="n">ConfigTreeView</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        An example of a custom ConfigTreeView wrapper</span>
+<span class="sd">        used to get indices that were defined in</span>
+<span class="sd">        the config structure</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+                <span class="n">ConfigTreeView</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                <span class="c">#Any post-initializing stuff here</span>
+                <span class="c">#This is the place to do stuff *BEFORE* the</span>
+                <span class="c">#columns, renderers, and properties are set</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">background_idx</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">def</span> <span class="nf">_handle_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">background_idx</span><span class="p">):</span>
+                <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                Override this function and set your custom args</span>
+<span class="sd">                &#39;&#39;&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">background_idx</span> <span class="o">=</span> <span class="n">background_idx</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>And now your treeview has an attribute <cite>background_idx</cite> that will contain the index
+at which the &#8216;bg_color&#8217; property you defined in the config will be formatted to.</p>
+</div>
+</div>
+<div class="section" id="using-dataformatter-to-create-rows">
+<h2>Using DataFormatter to create rows<a class="headerlink" href="#using-dataformatter-to-create-rows" title="Permalink to this headline">¶</a></h2>
+<p>Now that you&#8217;ve created a <tt class="docutils literal"><span class="pre">ConfigTreeView</span></tt> and initialized it with a config structure,
+you&#8217;re ready to start giving it data and using it!
+In order to get the data properly displayed you need to do a few things:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Make sure you understand the <a class="reference internal" href="data_model.html"><em>ConfigTreeView data model</em></a>
+and use it to give properly constructed data sets</li>
+<li>Create a <cite>DataFormatter</cite> object, initializing it with your <tt class="docutils literal"><span class="pre">ConfigTreeView</span></tt> &#8216;s
+<cite>index_map</cite>, and <cite>types</cite> structures.</li>
+<li>Create a <cite>GtkTreeModel</cite> to supply your TreeView with data</li>
+<li>Using the <cite>DataFormatter</cite> to yield formatted rows that can then be
+appended to your <cite>GtkTreeModel</cite></li>
+</ol>
+</div></blockquote>
+<p>Example(using the config that was defined above):</p>
+<blockquote>
+<div><div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">configtreeview.tools</span> <span class="kn">import</span> <span class="n">DataFormatter</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span> <span class="c">#The DataFormatter is expecting a list of dicts...each dict is a row following the ConfigTreeView Data Model</span>
+        <span class="p">{</span><span class="s">&#39;column_1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="s">&#39;Some data here&#39;</span><span class="p">},</span> <span class="s">&#39;column_2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="s">&#39;Column 2 data here&#39;</span><span class="p">}},</span>
+        <span class="p">{</span><span class="s">&#39;column_1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="s">&#39;More data col1&#39;</span><span class="p">},</span> <span class="s">&#39;column_2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="s">&#39;Column 2 data here&#39;</span><span class="p">}},</span>
+        <span class="p">{</span><span class="s">&#39;column_1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="s">&#39;Even more data here&#39;</span><span class="p">},</span> <span class="s">&#39;column_2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;markup&#39;</span><span class="p">:</span> <span class="s">&#39;Column 2 data here&#39;</span><span class="p">}},</span>
+<span class="p">]</span>
+
+<span class="c">#Create the DataFormatter</span>
+<span class="n">data_formatter</span> <span class="o">=</span> <span class="n">DataFormatter</span><span class="p">(</span><span class="n">my_treeview</span><span class="o">.</span><span class="n">index_map</span><span class="p">,</span> <span class="n">mytreeview</span><span class="o">.</span><span class="n">types</span><span class="p">)</span>
+
+<span class="c">#Get a treemodel</span>
+<span class="n">liststore</span> <span class="o">=</span> <span class="n">my_treeview</span><span class="o">.</span><span class="n">get_treemodel</span><span class="p">()</span> <span class="c">#Use this function to have your treeview build you a proper GtkTreeModel instance</span>
+<span class="n">my_treeview</span><span class="o">.</span><span class="n">set_model</span><span class="p">(</span><span class="n">liststore</span><span class="p">)</span>
+
+<span class="c">#Format the data rows for liststore and append them to it</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data_formatter</span><span class="o">.</span><span class="n">get_rows</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="n">liststore</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>And now the data should be displayed by your treeview!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#how-to-use-a-configtreeview">How To Use a <cite>ConfigTreeView</cite></a></li>
+<li><a class="reference internal" href="#how-to-create-build-a-config-structure">How To Create/Build a <cite>config</cite> Structure</a></li>
+<li><a class="reference internal" href="#a-custom-configtreeview-implmentation">A Custom <cite>ConfigTreeView</cite> implmentation</a><ul>
+<li><a class="reference internal" href="#why">Why?</a></li>
+<li><a class="reference internal" href="#how">How?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-dataformatter-to-create-rows">Using DataFormatter to create rows</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="configtreeview.tools.html"
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">configtreeview.tools</span></tt> Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/examples.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configtreeview.tools.html" title="configtreeview.tools Package"
+             >previous</a> |</li>
+        <li><a href="index.html">ConfigTreeView 0.1.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Wesley Hansen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

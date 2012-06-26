@@ -1,0 +1,184 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>About ConfigTreeView &mdash; ConfigTreeView 0.1.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ConfigTreeView 0.1.3 documentation" href="index.html" />
+    <link rel="next" title="More About ConfigTreeView" href="data_model.html" />
+    <link rel="prev" title="Welcome to ConfigTreeView’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="data_model.html" title="More About ConfigTreeView"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to ConfigTreeView’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">ConfigTreeView 0.1.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="about-configtreeview">
+<h1>About ConfigTreeView<a class="headerlink" href="#about-configtreeview" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div>This is an implementation of a GtkTreeView in python(using pygtk) that
+allows for easy, fast, and dynamic setting up of a TreeView, its
+TreeViewColumns and CellRenderers. This ConfigTreeView can create a TreeView
+with all its properties initialized through the use of a simple config-type
+file. This config file can be in a python dictionary format, or even read
+in from a JSON object.</div></blockquote>
+<div class="section" id="the-why-why-use-a-configtreeview">
+<h2>The Why (Why use a ConfigTreeView?)<a class="headerlink" href="#the-why-why-use-a-configtreeview" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>The ConfigTreeView was designed in such a way to abstract the developer
+from having to set up indices for how a ListStore row of data should look.
+The config file creates an easy way to do it and allows you to supply a
+row of data in python dict form(or a JSON) while initializing all the
+properties, columns, cell renderers that could possbily be used in
+creating a TreeView.</li>
+<li>Eliminates the several lines of code it takes to initialize a TreeView.
+A TreeView is a very useful but also very complicated widget in the gtk
+arsenal and this implementation takes away that complication.</li>
+<li>Useful for data sets that could change frequently without having
+to go in and change the code.&#8211;This is actually the use case that I ran
+into at my place of work that inspired me to create the ConfigTreeView. We
+have an application that many people use in the office that is connected
+to a server. The application gets all of the data from the server and
+displays it in a GtkTreeView but the data could change in the near future
+as we may need to display new columns or different formats of data in the
+same TreeView so we wanted a system set in place that could allow for us
+to change the data the server was sending without having to go in and
+change the code in the clients(i.e. the TreeView) in order to properly
+display the newly changed data. With a ConfigTreeView you can do just
+this: the server can supply a config structure to initialize the clients,
+eliminating the need for changing the client code.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="how-to-use-it">
+<h2>How to use it<a class="headerlink" href="#how-to-use-it" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p class="first">It&#8217;s easy! All you need to do is create a config file( either as a python
+dict in a .py file or as a JSON file).</p>
+</li>
+<li><p class="first">Then with a config file, you&#8217;re ready to create a ConfigTreeView:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">config_treeview</span> <span class="kn">import</span> <span class="n">ConfigTreeView</span>
+<span class="c">#Import the config structure(it&#39;s a python dict named config)</span>
+<span class="kn">from</span> <span class="nn">myconfigfile</span> <span class="kn">import</span> <span class="n">config</span>
+<span class="c">#Create a ConfigTreeView using config as the configuration structure</span>
+<span class="n">treeview</span> <span class="o">=</span> <span class="n">ConfigTreeView</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="c">#Apply the config structure to finish initalizing the TreeView</span>
+<span class="n">treeview</span><span class="o">.</span><span class="n">_apply_config</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">About ConfigTreeView</a><ul>
+<li><a class="reference internal" href="#the-why-why-use-a-configtreeview">The Why (Why use a ConfigTreeView?)</a></li>
+<li><a class="reference internal" href="#how-to-use-it">How to use it</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to ConfigTreeView&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="data_model.html"
+                        title="next chapter">More About ConfigTreeView</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/about_config_treeview.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="data_model.html" title="More About ConfigTreeView"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to ConfigTreeView’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">ConfigTreeView 0.1.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Wesley Hansen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HOW-TO: Create a config file &mdash; ConfigTreeView 0.1.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ConfigTreeView 0.1.3 documentation" href="index.html" />
+    <link rel="next" title="configtreeview Module" href="configtreeview.html" />
+    <link rel="prev" title="The Config Structure" href="config_api_notes.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configtreeview.html" title="configtreeview Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="config_api_notes.html" title="The Config Structure"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">ConfigTreeView 0.1.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="how-to-create-a-config-file">
+<h1>HOW-TO: Create a config file<a class="headerlink" href="#how-to-create-a-config-file" title="Permalink to this headline">¶</a></h1>
+<p>This document details everything you need to know about creating a config file
+for use with a ConfigTreeView. First I&#8217;ll say a few things about how a config
+file is made.</p>
+<div class="section" id="making-a-config-file">
+<h2>Making a config file:<a class="headerlink" href="#making-a-config-file" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>-The config file is represented as a dictionary in python. Because of
+this, you can either create a python dict in a separate .py file or
+create one on the fly within your code...OR...you can create the dict
+in a JSON document...and simply give the path to the JSON file in the
+constructor to the ConfigTreeView where you&#8217;d supply the python dict
+normally.</div></blockquote>
+</div>
+<div class="section" id="basic-structure">
+<h2>Basic Structure:<a class="headerlink" href="#basic-structure" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>-Here&#8217;s a look at the top-level keys in the config dict:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+        <span class="s">&quot;treeview&quot;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="s">&quot;index_names&quot;</span><span class="p">:{},</span>
+        <span class="s">&quot;column_order&quot;</span><span class="p">:[],</span>
+        <span class="s">&quot;macros&quot;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="s">&quot;columns&quot;</span><span class="p">:{}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="section" id="the-treeview-key-optional">
+<h3>The <em>treeview</em> key(optional):<a class="headerlink" href="#the-treeview-key-optional" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>The <em>treeview</em> key(this key is not required, unless you&#8217;re setting properties):</dt>
+<dd><p class="first">This key sets up everything dealing with initializing the TreeView container.
+This includes setting gtk properties, some style options and also supplying
+custom positional and/or keyword arguments to your custom ConfigTreeView.</p>
+<blockquote>
+<div><p>example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+        <span class="s">&quot;treeview&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s">&quot;rules-hint&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                        <span class="s">&quot;headers-clickable&quot;</span><span class="p">:</span> <span class="bp">True</span>
+                <span class="p">},</span>
+                <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s">&quot;kwargs&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                <span class="s">&quot;bg&quot;</span><span class="p">:</span> <span class="s">&quot;green&quot;</span><span class="p">,</span>
+                <span class="s">&quot;bg-even&quot;</span><span class="p">:</span> <span class="s">&quot;red&quot;</span><span class="p">,</span>
+                <span class="s">&quot;bg-odd&quot;</span><span class="p">:</span> <span class="s">&quot;yellow&quot;</span><span class="p">,</span>
+                <span class="s">&quot;selection-mode&quot;</span><span class="p">:</span> <span class="s">&quot;SELECTION_SINGLE&quot;</span><span class="p">,</span>
+                <span class="s">&quot;selection-color&quot;</span><span class="p">:</span> <span class="s">&quot;blue&quot;</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <em>properties</em> key defines gtk properties for the TreeView as found in the
+pygtk documentation: <a class="reference external" href="http://www.pygtk.org/docs/pygtk/class-gtktreeview.html">http://www.pygtk.org/docs/pygtk/class-gtktreeview.html</a>
+Any of the properties listed here can be defined in the &#8220;properties&#8221; key.
+An entry in the <em>properties</em> dict takes the following form:</p>
+<blockquote>
+<div><div class="highlight-python"><pre>"gtk-property-name": "value"</pre>
+</div>
+</div></blockquote>
+<p>Note: if the value is not a native python type(ex: a gtk object),
+this is not currently supported...but only a few properties are
+like that.</p>
+<p>The <em>args</em> and <em>kwargs</em> keys let you define positional(args) and keyword(kwargs)
+to a custom ConfigTreeView prototype. This works in the same fashion as passing
+any positional([]) and keyword({}) args to an object in python. A common use/need for
+this arises when you need your custom treeview to know the index of an attribute
+that was defined in the config file. The config file makes this easy with the
+use of the <em>$index</em> dotted-key string.</p>
+<p>An example of an $index key:  <cite>$index.cell_bg_set</cite>
+Supplying the above $index key in either args or kwargs will set that
+parameter as the index of &#8216;cell_bg_set&#8217;( as defined in <em>index_names</em>) in
+the data model.
+Values supplied to <em>args</em> and <em>kwargs</em> are passed through the &#8216;handle_args&#8217;
+function in the ConfigTreeView which should be overridden when you create
+your own custom ConfigTreeView.</p>
+<p>The <em>bg</em>, <em>bg-even</em>, and <em>bg-odd</em> keys are style options that I&#8217;ve added that
+allow you to change the background colors of a TreeView. <em>bg</em> by itself
+changes the background to a single color...color can either be a gtk-accepted
+string name(ex: &#8220;blue&#8221;) or it can be a hexidecimal string(ex: &#8220;#FF0078&#8221;).
+If you wish to have your ConfigTreeView with two colors, alternating per row,
+supply the <em>bg-even</em> and <em>bg-odd</em> colors instead. Note: <em>bg-even</em> and <em>bg-odd</em>
+must be supplied together or you&#8217;ll get errors when you try to apply your
+config.
+A GTK Note: These color options change the underlying GtkStyle which is
+determined by the users theme. You should try to stay away from using this
+and respect a user&#8217;s theme choices...but if you&#8217;re in a controlled environment
+or it&#8217;s for personal use, then it&#8217;s okay to change these styles as you see fit.</p>
+<p>The <em>selection-mode</em> key allows you to set the mode of the GtkTreeSelection.
+This is limited to these values:
+(SELECTION_NONE, SELECTION_SINGLE, SELECTION_BROWSE, SELECTION_MULTIPLE)</p>
+<p class="last">The <em>selection-color</em> key allows you to change the color of the selection bar
+in the TreeView. This bar is what highlights a row you&#8217;ve just clicked on.
+The value for this key follows the same guidelines as <em>bg</em>, <em>bg-even</em> and <em>bg-odd</em>
+Note: This too should only be used in a controlled environment, because you
+should respect the user&#8217;s choice of theme.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="the-index-names-key-required">
+<h3>The <em>index_names</em> key(required):<a class="headerlink" href="#the-index-names-key-required" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>This required key defines how your data structure will look, as
+well as defining the types for each member of a row of data. It essentially
+defines what attributes a row of data needs, and the types for each attribute.
+An example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s">&quot;index_names&quot;</span><span class="p">:{</span>
+          <span class="s">&quot;record_open_bool&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+          <span class="s">&quot;order_status&quot;</span><span class="p">:{</span>
+                  <span class="s">&quot;markup&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+          <span class="p">},</span>
+          <span class="s">&quot;column_one&quot;</span><span class="p">:[</span>
+                  <span class="p">{</span><span class="s">&quot;markup&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="s">&quot;cell-background&quot;</span><span class="p">:</span><span class="nb">str</span><span class="p">},</span>
+                  <span class="p">{</span><span class="s">&quot;pixbuf&quot;</span><span class="p">:</span> <span class="s">&quot;gtk.gdk.Pixbuf&quot;</span><span class="p">}</span>
+          <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The top level keys within the <em>index_names</em> dict are names that you
+give to columns, or names that you give to a variable. And the values at
+these keys result in a type for that value later on.</p>
+<p>In the above example the &#8220;record_open_bool&#8221; key is an example
+of how you&#8217;d define a variable. A &#8216;variable&#8217; in the config file is
+a value that you want an index for in the data model, but it is used by
+more than one CellRenderer. You&#8217;ll see how this is applied when the <em>columns</em>
+structure is detailed later on.</p>
+<p>The <em>order_status</em> key in the above example is for a column named <em>order_status</em>
+that has a single CellRenderer that wishes to create an index for &#8220;markup&#8221; with
+a type of &#8216;str&#8217;.</p>
+<p>The <em>column_one</em> key in the above example is for a column named <em>column_one</em>
+that has two CellRenderers. The first CellRenderer defines a &#8220;markup&#8221; property
+of type str and a &#8220;cell-background&#8221; property of type str. And the second
+CellRenderer defines a &#8220;pixbuf&#8221; property of type &#8220;gtk.gdk.Pixbuf&#8221;.</p>
+<p>Note: when creating <em>$index</em> args to pass to &#8220;treeview.args/kwargs&#8221; you can
+define any value within the <em>index_names</em> dict by using dotted-key-notation.
+Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;$index.record_open_bool&quot;</span>
+<span class="s">&quot;$index.order_status.markup&quot;</span>
+<span class="s">&quot;$index.column_one.0.markup&quot;</span>
+<span class="s">&quot;$index.column_one.1.pixbuf&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="the-column-order-key-required">
+<h3>The <em>column_order</em> key( required):<a class="headerlink" href="#the-column-order-key-required" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>This required key defines the order you want the columns to be appended to
+the ConfigTreeView.
+Example:</p>
+<div class="highlight-python"><pre>"column_order": ["order_status", "column_one"]</pre>
+</div>
+<p>The column names are the same as the columns that you define in <em>index_names</em>
+and also <em>columns</em>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="the-macros-key-optional">
+<h3>The <em>macros</em> key(optional):<a class="headerlink" href="#the-macros-key-optional" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>This key lets you define a set of properties that you wish to use multiple
+times throughout the config file. This feature is added only as a convenience
+to make the config structure cleaner looking by removing some redundancies.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+        <span class="s">&quot;macros&quot;</span><span class="p">:{</span>
+                <span class="s">&quot;cell-text-default&quot;</span><span class="p">:{</span>
+                        <span class="s">&quot;font&quot;</span><span class="p">:</span> <span class="s">&quot;Lucida Sans 8&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;foreground&quot;</span><span class="p">:</span> <span class="s">&quot;green&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the above example, a macro named &#8220;cell-text-default&#8221; was defined that
+sets properties &#8220;font&#8221; and &#8220;foreground&#8221;. These properties must be valid
+GtkProperties for whatever widget you end up defining them for( TreeViewColumn
+or CellRenderer)</p>
+<p>In the next section, <em>columns</em>, you&#8217;ll see how to set a macro that&#8217;s been
+defined.</p>
+</div></blockquote>
+</div>
+<div class="section" id="the-columns-key-required">
+<h3>The <em>columns</em> key(required):<a class="headerlink" href="#the-columns-key-required" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>This required key lets you define the columns, by name, that you want to
+create for this ConfigTreeView. The name must be the same name as defined
+in <em>index_names</em>.
+Example:</p>
+<div class="highlight-python"><pre>"columns":{
+        "column_one":{
+        },
+        "order_status"{
+        }
+}</pre>
+</div>
+<p>Example of &#8220;column_one&#8221; column:</p>
+<div class="highlight-python"><pre>"column_one":{
+        "header":{
+                "title": "Column1",
+                "module": None,
+                "class": "Button",
+                "args": [],
+                "kwargs": {},
+        },
+        "macros": ["cell-text-default"],
+        "properties"{
+                "resizable": True,
+                "visible": True,
+                "max-width": 100,
+        },
+        "renderers":[]
+}</pre>
+</div>
+<p>The <em>header</em> key is where you define anything about this column&#8217;s header.
+If you just want text in the header, then supply the <em>title</em> key. You may
+wish to put a widget up there which you can do by supplying the &#8216;module&#8217;,
+&#8216;class&#8217;, &#8216;args&#8217;, and &#8216;kwargs&#8217; keys for the class you want.
+Note: if module isn&#8217;t supplied, it&#8217;s defaulted to the gtk module. And if
+class isn&#8217;t supplied, it&#8217;s defaulted to gtk.Label.</p>
+<p>The <em>macros</em> key is where you set the macros that you already defined
+in the <em>macros</em> top-level-key. This is simply done by supplying
+the name of the macro(s) you wish to use in a list as is demonstrated
+in the above example.</p>
+<p>The <em>properties</em> key is where you define any properties that you want
+to set for the particular column. This follows the same guidelines as
+the <em>properties</em> key in the <em>treeview</em> top-level key.
+TreeViewColumn properties:
+<a class="reference external" href="http://www.pygtk.org/docs/pygtk/class-gtktreeviewcolumn.html">http://www.pygtk.org/docs/pygtk/class-gtktreeviewcolumn.html</a></p>
+</div></blockquote>
+</div>
+<div class="section" id="defining-renderers">
+<h3>Defining Renderers:<a class="headerlink" href="#defining-renderers" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>The <em>renderers</em> key is where you define what CellRenderers will go
+into a given column and also what properties and indices the renderer
+will have.
+Example:</p>
+<div class="highlight-python"><pre>"column_one":{
+        "renderers":[
+                {
+                        "pack": "pack_start",
+                        "expand": "True",
+                        "module": None,
+                        "class": "CellRendererText",
+                        "args": [],
+                        "kwargs": {},
+                        "properties":{
+                                "height": 25,
+                                "xpad": 5,
+                                "font": "Times New Roman 13"
+                        },
+                        "indices": {
+                                "markup": True,
+                                "cell-background-set": "record_open_bool"
+                        }
+                }
+                {
+                        "class": "CellRendererPixbuf",
+                        "indices": {
+                                "pixbuf": True,
+                                "cell-background-set": "record_open_bool"
+                        }
+                }
+        ]
+}</pre>
+</div>
+<p>If a column has a single CellRenderer, then you define the <em>renderers</em>
+key as a dict({}), but if a column has multiple CellRenderers, you define
+the <em>renderers</em> key as a list([]) containing dicts where each dict
+is a CellRenderer</p>
+<dl class="docutils">
+<dt>From the above example you see a CellRenderer is defined as:</dt>
+<dd><p class="first">The <em>pack</em> key defines how the CellRenderer will be added to the TreeViewColumn.
+Accepted values are: &#8220;pack_start&#8221; and &#8220;pack_end&#8221;. If this key isn&#8217;t supplied,
+it defaults to &#8220;pack_start&#8221;.</p>
+<p>The <em>expand</em> key defines whether or not the CellRenderer will expand to
+the size the TreeViewColumn supplies. True or False. If key isn&#8217;t supplied,
+it defaults to True.</p>
+<p>The <em>module</em>, <em>class</em>, <em>args</em>, and <em>kwargs</em> keys are used to supply
+a custom CellRenderer. If these keys aren&#8217;t supplied, it&#8217;s defaulted to
+a gtk.CellRendererText</p>
+<p>The <em>properties</em> key is where you define any properties that you want
+to set specifically for this CellRenderer. This follows the same guidelines
+as the <em>properties</em> key in the <em>treeview</em> top-level key.
+CellRendererProperties: <a class="reference external" href="http://www.pygtk.org/pygtk2tutorial/sec-CellRenderers.html">http://www.pygtk.org/pygtk2tutorial/sec-CellRenderers.html</a></p>
+<p>The <em>indices</em> key is where you define what CellRenderer properties you
+want controlled by the data model. You already defined the types and
+size of the structure, this is where you request an index in the data
+model for the given property.
+These properties are also the same properties that you can define
+in the <em>properties</em> key, but when they&#8217;re defined as an index, the value
+of the property is defined by the data model for each row.</p>
+<p class="last">In the above example, the first CellRenderer dict defines two properties:
+&#8220;markup&#8221; and &#8220;cell-background-set&#8221;. When you&#8217;re just requesting a new index,
+a value of True is passed...but when you&#8217;re setting that value to another
+value( granted the value is defined in <em>index_names</em>) then you&#8217;re simply
+pointing that property to an index that is shared by multiple renderers.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HOW-TO: Create a config file</a><ul>
+<li><a class="reference internal" href="#making-a-config-file">Making a config file:</a></li>
+<li><a class="reference internal" href="#basic-structure">Basic Structure:</a><ul>
+<li><a class="reference internal" href="#the-treeview-key-optional">The <em>treeview</em> key(optional):</a></li>
+<li><a class="reference internal" href="#the-index-names-key-required">The <em>index_names</em> key(required):</a></li>
+<li><a class="reference internal" href="#the-column-order-key-required">The <em>column_order</em> key( required):</a></li>
+<li><a class="reference internal" href="#the-macros-key-optional">The <em>macros</em> key(optional):</a></li>
+<li><a class="reference internal" href="#the-columns-key-required">The <em>columns</em> key(required):</a></li>
+<li><a class="reference internal" href="#defining-renderers">Defining Renderers:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="config_api_notes.html"
+                        title="previous chapter">The Config Structure</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="configtreeview.html"
+                        title="next chapter">configtreeview Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/how_to_config_file.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="configtreeview.html" title="configtreeview Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="config_api_notes.html" title="The Config Structure"
+             >previous</a> |</li>
+        <li><a href="index.html">ConfigTreeView 0.1.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Wesley Hansen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
