@@ -48,3 +48,7 @@ How to use it
 		treeview = ConfigTreeView(config)
 		#Apply the config structure to finish initalizing the TreeView
 		treeview._apply_config()
+
+For more information
+====================
+Check out the documentation in the `html/` directory starting with `index.html`
