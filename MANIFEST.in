@@ -1,3 +1,4 @@
 include *.txt
 recursive-include configtreeview *
-recursive include html *
+recursive-include html *
+include README.rst

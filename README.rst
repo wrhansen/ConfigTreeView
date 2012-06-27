@@ -51,4 +51,8 @@ How to use it
 
 For more information
 ====================
-Check out the documentation in the `html/` directory starting with `index.html`
+Check out the documentation in the source in the `html/` directory starting with 
+`index.html`
+
+or visit the _docs.
+.. _docs: http://configtreeview.readthedocs.org/en/latest/index.html

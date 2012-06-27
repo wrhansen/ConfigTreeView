@@ -13,14 +13,14 @@ except (ImportError,AssertionError) as e:
 
 setup(
 	name='configtreeview',
-	version='0.1.3',
+	version='0.1.31',
 	author='Wesley Hansen',
 	author_email='wes@ridersdiscount.com',
 	packages=find_packages(),
 	url='http://github.com/wrhansen/ConfigTreeView',
 	license='GPLv3',
 	description='An easily configurable GtkTreeView implementation for pygtk.',
-	long_description = open('README.txt').read(),
+	long_description = open('README.rst').read(),
 	platforms=["POSIX", "Windows"],
 	install_requires=required
 )

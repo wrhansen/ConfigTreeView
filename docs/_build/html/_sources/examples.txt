@@ -118,7 +118,7 @@ variable to our config that will be used to change the background of a cellrende
 				"args": ['$index.bg_color'],#Pass the 'bg_color' index to our custom treeview
 			},
 			"index_names": {
-				'bg_color': str,
+				'bg_color': str,#Define the 'bg_color' variable--we'll make it a variable if we plan on using the same index for multiple renderers
 				'column_1': {'markup': str},
 				'column_2': {'markup': str}
 			},
