@@ -41,7 +41,7 @@ How to use it
 	  dict in a .py file or as a JSON file). 
 	* Then with a config file, you're ready to create a ConfigTreeView:
 	
-		.. code:: python
+		```python
 		
 			from config_treeview import ConfigTreeView
 			#Import the config structure(it's a python dict named config)
@@ -50,6 +50,7 @@ How to use it
 			treeview = ConfigTreeView(config)
 			#Apply the config structure to finish initalizing the TreeView
 			treeview._apply_config()
+		```
 
 For more information
 ====================
