@@ -8,8 +8,8 @@ This document details everything you need to know about creating a config file
 for use with a ConfigTreeView. First I'll say a few things about how a config
 file is made.
 
-Making a config file:
----------------------
+Making a config file
+--------------------
 	
 		-The config file is represented as a dictionary in python. Because of
 		this, you can either create a python dict in a separate .py file or
@@ -19,14 +19,15 @@ Making a config file:
 		normally.
 	
 	
-Basic Structure:
-----------------
+Basic Structure
+---------------
 	
 		-Here's a look at the top-level keys in the config dict:
 		::
 		
 			{
 				"treeview": {},
+				"treemodel": {},
 				"index_names":{},
 				"column_order":[],
 				"macros": {},
@@ -61,7 +62,6 @@ The *treeview* key(this key is not required, unless you're setting properties):
 				}
 			}
 
-
 	The *properties* key defines gtk properties for the TreeView as found in the
 	pygtk documentation: http://www.pygtk.org/docs/pygtk/class-gtktreeview.html
 	Any of the properties listed here can be defined in the "properties" key.
@@ -72,8 +72,12 @@ The *treeview* key(this key is not required, unless you're setting properties):
 			"gtk-property-name": "value"
 	
 	Note: if the value is not a native python type(ex: a gtk object),
-	this is not currently supported...but only a few properties are
-	like that.
+	this is not currently supported if you define the config file in 
+	a JSON as primitive types...but only a few properties are
+	like that. If you need to use these types, consider it good practice
+	to define the config structure in it's own python module. Then you can
+	import all the modules you need.
+
 	
 	The *args* and *kwargs* keys let you define positional(args) and keyword(kwargs)
 	to a custom ConfigTreeView prototype. This works in the same fashion as passing
@@ -112,7 +116,50 @@ The *treeview* key(this key is not required, unless you're setting properties):
 	The value for this key follows the same guidelines as *bg*, *bg-even* and *bg-odd*
 	Note: This too should only be used in a controlled environment, because you
 	should respect the user's choice of theme.
+
+------------------------------
+The *treemodel* key(optional):
+------------------------------
 	
+	This optional key defines a TreeModel instance that is required to properly
+	manage and store the data so that it can be displayed by your ``ConfigTreeView``.
+	When a call to ``ConfigTreeView.get_treemodel()`` is made, the information
+	for the TreeModel to create is grabbed from this key's structure:
+	
+		.. code:: python
+		
+			{
+				#Config stuff here...
+				"treemodel": {
+					"module": "chronicle.gui.tools.image_loader",
+					"class": "ImageStore",
+					"args": ["$index.market.pixbuf"],
+					"kwargs":{},
+				}
+				#More config stuff here...
+			}
+	
+	* The *"module"* key is a string that points to the location of the
+	  module that you need to import in order to create an instance of the
+	  custom TreeModel you need to use.
+	* The *"class"* key is a string that is the name of the custom TreeModel that
+	  will be instantiated. Note: This class must be an instance of a `GtkTreeModel`
+	  or the instantiation will fail and fallback to a `GtkListStore`.
+	* The *"args"* key is a list of all the positional arguments you want to
+	  send to the TreeModel's *_handle_args()* method. This method should be
+	  present in your TreeModel custom implementation if you need to pass any
+	  arguments to it that will be handled before data rows are appended to the
+	  model.
+	* The *"kwargs"* key is a dict of keyword arguments you to send to the TreeModel's
+	  *_handle_args()* method. The same rules apply to this key as to the *"args"* key.
+
+	It is important to note that if this key is not supplied, or there is any
+	kind of error in importing, initializing, or running the custom implementation
+	defined in this structure--the ConfigTreeView will fallback and initialize
+	a `GtkListStore` with the proper *types* and return that instead when *get_treemodel()*
+	is called.
+	
+
 --------------------------------
 The *index_names* key(required):
 --------------------------------
@@ -345,15 +392,5 @@ Defining Renderers:
 		pointing that property to an index that is shared by multiple renderers.
 		
 	
-	
-	
-	
-	
-	 
 
-	
-	
-	
-	
-	
 	

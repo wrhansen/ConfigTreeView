@@ -60,7 +60,7 @@
 for use with a ConfigTreeView. First I&#8217;ll say a few things about how a config
 file is made.</p>
 <div class="section" id="making-a-config-file">
-<h2>Making a config file:<a class="headerlink" href="#making-a-config-file" title="Permalink to this headline">¶</a></h2>
+<h2>Making a config file<a class="headerlink" href="#making-a-config-file" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>-The config file is represented as a dictionary in python. Because of
 this, you can either create a python dict in a separate .py file or
@@ -70,11 +70,12 @@ constructor to the ConfigTreeView where you&#8217;d supply the python dict
 normally.</div></blockquote>
 </div>
 <div class="section" id="basic-structure">
-<h2>Basic Structure:<a class="headerlink" href="#basic-structure" title="Permalink to this headline">¶</a></h2>
+<h2>Basic Structure<a class="headerlink" href="#basic-structure" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>-Here&#8217;s a look at the top-level keys in the config dict:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
         <span class="s">&quot;treeview&quot;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="s">&quot;treemodel&quot;</span><span class="p">:</span> <span class="p">{},</span>
         <span class="s">&quot;index_names&quot;</span><span class="p">:{},</span>
         <span class="s">&quot;column_order&quot;</span><span class="p">:[],</span>
         <span class="s">&quot;macros&quot;</span><span class="p">:</span> <span class="p">{},</span>
@@ -119,8 +120,11 @@ An entry in the <em>properties</em> dict takes the following form:</p>
 </div>
 </div></blockquote>
 <p>Note: if the value is not a native python type(ex: a gtk object),
-this is not currently supported...but only a few properties are
-like that.</p>
+this is not currently supported if you define the config file in
+a JSON as primitive types...but only a few properties are
+like that. If you need to use these types, consider it good practice
+to define the config structure in it&#8217;s own python module. Then you can
+import all the modules you need.</p>
 <p>The <em>args</em> and <em>kwargs</em> keys let you define positional(args) and keyword(kwargs)
 to a custom ConfigTreeView prototype. This works in the same fashion as passing
 any positional([]) and keyword({}) args to an object in python. A common use/need for
@@ -156,6 +160,49 @@ Note: This too should only be used in a controlled environment, because you
 should respect the user&#8217;s choice of theme.</p>
 </dd>
 </dl>
+</div>
+<div class="section" id="the-treemodel-key-optional">
+<h3>The <em>treemodel</em> key(optional):<a class="headerlink" href="#the-treemodel-key-optional" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>This optional key defines a TreeModel instance that is required to properly
+manage and store the data so that it can be displayed by your <tt class="docutils literal"><span class="pre">ConfigTreeView</span></tt>.
+When a call to <tt class="docutils literal"><span class="pre">ConfigTreeView.get_treemodel()</span></tt> is made, the information
+for the TreeModel to create is grabbed from this key&#8217;s structure:</p>
+<blockquote>
+<div><div class="code python highlight-python"><div class="highlight"><pre><span class="p">{</span>
+        <span class="c">#Config stuff here...</span>
+        <span class="s">&quot;treemodel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;module&quot;</span><span class="p">:</span> <span class="s">&quot;chronicle.gui.tools.image_loader&quot;</span><span class="p">,</span>
+                <span class="s">&quot;class&quot;</span><span class="p">:</span> <span class="s">&quot;ImageStore&quot;</span><span class="p">,</span>
+                <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;$index.market.pixbuf&quot;</span><span class="p">],</span>
+                <span class="s">&quot;kwargs&quot;</span><span class="p">:{},</span>
+        <span class="p">}</span>
+        <span class="c">#More config stuff here...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li>The <em>&#8220;module&#8221;</em> key is a string that points to the location of the
+module that you need to import in order to create an instance of the
+custom TreeModel you need to use.</li>
+<li>The <em>&#8220;class&#8221;</em> key is a string that is the name of the custom TreeModel that
+will be instantiated. Note: This class must be an instance of a <cite>GtkTreeModel</cite>
+or the instantiation will fail and fallback to a <cite>GtkListStore</cite>.</li>
+<li>The <em>&#8220;args&#8221;</em> key is a list of all the positional arguments you want to
+send to the TreeModel&#8217;s <em>_handle_args()</em> method. This method should be
+present in your TreeModel custom implementation if you need to pass any
+arguments to it that will be handled before data rows are appended to the
+model.</li>
+<li>The <em>&#8220;kwargs&#8221;</em> key is a dict of keyword arguments you to send to the TreeModel&#8217;s
+<em>_handle_args()</em> method. The same rules apply to this key as to the <em>&#8220;args&#8221;</em> key.</li>
+</ul>
+<p>It is important to note that if this key is not supplied, or there is any
+kind of error in importing, initializing, or running the custom implementation
+defined in this structure&#8211;the ConfigTreeView will fallback and initialize
+a <cite>GtkListStore</cite> with the proper <em>types</em> and return that instead when <em>get_treemodel()</em>
+is called.</p>
+</div></blockquote>
 </div>
 <div class="section" id="the-index-names-key-required">
 <h3>The <em>index_names</em> key(required):<a class="headerlink" href="#the-index-names-key-required" title="Permalink to this headline">¶</a></h3>
@@ -373,9 +420,10 @@ pointing that property to an index that is shared by multiple renderers.</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HOW-TO: Create a config file</a><ul>
-<li><a class="reference internal" href="#making-a-config-file">Making a config file:</a></li>
-<li><a class="reference internal" href="#basic-structure">Basic Structure:</a><ul>
+<li><a class="reference internal" href="#making-a-config-file">Making a config file</a></li>
+<li><a class="reference internal" href="#basic-structure">Basic Structure</a><ul>
 <li><a class="reference internal" href="#the-treeview-key-optional">The <em>treeview</em> key(optional):</a></li>
+<li><a class="reference internal" href="#the-treemodel-key-optional">The <em>treemodel</em> key(optional):</a></li>
 <li><a class="reference internal" href="#the-index-names-key-required">The <em>index_names</em> key(required):</a></li>
 <li><a class="reference internal" href="#the-column-order-key-required">The <em>column_order</em> key( required):</a></li>
 <li><a class="reference internal" href="#the-macros-key-optional">The <em>macros</em> key(optional):</a></li>

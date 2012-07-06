@@ -40,9 +40,10 @@ to rapidly and easily build TreeViews.
 			'selection-color': '#bfd3e7', #Change the color of the selection bar--value can be a valid color name or hex string
 		},
 		"treemodel": { #You can tell the TreeView to build you a custom TreeModel(via the get_treemodel() function)
+			"module": "package.subpackage.module", #The package/module location of the class to import
 			"class": "CustomTreeModelClass", #Your custom GtkTreeModel implementation
-			"args": [], #The positional arguments to send to the class' _handle_args method
-			"kwargs": {}, #The keyword arguments to send to the class' _handle_args method
+			"args": [], #The positional arguments to send to the TreeModel's _handle_args method
+			"kwargs": {}, #The keyword arguments to send to the TreeModel's _handle_args method
 		},
 		"index_names":{ #Maps the given index into the type of data it will store
 			"record_open_bool": bool, #This is how you define a type of 'bool' for an index that will be used by more than one column's renderer

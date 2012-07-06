@@ -1,23 +1,25 @@
 #encoding: utf-8
-#Copyright (C) 2012 Wesley Hansen
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-#Contact via email: wes@ridersdiscount.com
+"""
+Copyright (C) 2012 Wesley Hansen
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Contact via email: wes@ridersdiscount.com
+"""
 
 __author__ = "Wesley Hansen"
-__version__ = "0.1.3"
-__date__ = "04/20/2012 12:38:22 PM"
+__version__ = "0.1.3.12"
+__date__ = "07/6/2012 10:50:22 PM"
 
 
 import gtk
@@ -42,7 +44,7 @@ class ConfigTreeView( gtk.TreeView ):
 	'''	
 	minimum_keys = {'index_names'} #The minimum top-level keys that are required in the config structure
 	accepted_keys = {"treeview", "treemodel", "column_order", "macros", "columns"} | minimum_keys#The accepted top-level keys that can be in a config structure	
-	def __init__(self, config ):
+	def __init__(self, config, debug=False):
 		'''
 		This treeview is built from a configuration data structure. The configuration
 		gives enough information to build all of the TreeView's columns,
@@ -51,12 +53,13 @@ class ConfigTreeView( gtk.TreeView ):
 		of the indices that the columns require to give to the data model.
 		
 		:param `config`:
-			The configuration structure( a python dict) that will build the underlying
+			The configuration structure(a python dict) that will build the underlying
 			gtk.TreeView.Check out :doc:`HOW-TO create a config <how_to_config_file>`
 			for info on how to build a configuration structure
 		'''
 		gtk.TreeView.__init__(self)
-		
+
+		self.debug = debug
 		#Open json dict
 		if isinstance( config, basestring):
 			#It's a string, check if it's a valid filepath
@@ -78,7 +81,6 @@ class ConfigTreeView( gtk.TreeView ):
 		self.args = []#Positional args for a custom ConfigTreeView to handle
 		self.kwargs = {}#Keyword args for a custom ConfigTreeView to handle
 		self.selection_modes = ('SELECTION_SINGLE', 'SELECTION_NONE', 'SELECTION_BROWSE', 'SELECTION_MULTIPLE')#Acceptable selection modes for a GtkTreeView
-		#self._apply_config()
 
 	def _apply_config(self):
 		'''
@@ -114,7 +116,7 @@ class ConfigTreeView( gtk.TreeView ):
 			if not isinstance(value, basestring) and (isinstance(value, list) or isinstance(value, dict)):
 				if column not in self.config.get('columns', {}):
 					#Just print a warning that a defined column is never used
-					print "Warning!: '%s' is defined as a column in `index_names`, but is never used" % column
+					if self.debug: print "Warning!: '%s' is defined as a column in `index_names`, but is never used" % column
 
 		index_names = self.index_map
 		if index_names is {}:
@@ -132,14 +134,14 @@ class ConfigTreeView( gtk.TreeView ):
 				self.index_vars.append( key )#Update the index_variables list
 				self.index_map[key] = value
 
-		"""
 		#Debugging
-		print "Okay, successfully created index map, here it is!:"
-		pprint.pprint( self.index_map )
-		print "*"*50
-		print 'Types:'
-		pprint.pprint(self.types)
-		"""
+		if self.debug:
+			print "Okay, successfully created index map, here it is!:"
+			pprint.pprint( self.index_map )
+			print "*"*50
+			print 'Types:'
+			pprint.pprint(self.types)
+
 		#Handle args--for custom ConfigTreeViews
 		#Check for $index args or kwargs...validate them
 		#It's valid if the 'dotted' key evaluates to an actual value
@@ -232,15 +234,15 @@ class ConfigTreeView( gtk.TreeView ):
 					module = __import__( module, globals(), locals(), [moduleclass], -1 )
 					moduleclass = getattr( module, moduleclass)
 				except ImportError:#module doesn't exist, fallback to gtk
-					print "Warning!: Couldn't import module `%s`, falling back to gtk" % module
+					if self.debug: print "Warning!: Couldn't import module `%s`, falling back to gtk" % module
 					module = gtk
 					moduleclass = getattr( module, moduleclass )
 				except AttributeError:
-					print "Warning!: `%s` is not an attribute of `%s`, falling back to gtk.Label" % (moduleclass, module)
+					if self.debug: print "Warning!: `%s` is not an attribute of `%s`, falling back to gtk.Label" % (moduleclass, module)
 					module = gtk
 					moduleclass = getattr(module, 'Label' )
 				except:
-					print "An unexpected error occured, falling back to gtk.Label"
+					if self.debug: print "An unexpected error occured, falling back to gtk.Label"
 					module = gtk
 					moduleclass = getattr( module, 'Label' )
 			else:
@@ -321,15 +323,15 @@ class ConfigTreeView( gtk.TreeView ):
 					module = __import__( module, globals(), locals(), [moduleclass], -1 )
 					moduleclass = getattr( module, moduleclass)
 				except ImportError:
-					print "Warning!: Couldn't import module `%s`, falling back to gtk"% module
+					if self.debug: print "Warning!: Couldn't import module `%s`, falling back to gtk"% module
 					module = gtk
 					moduleclass = getattr( module, moduleclass )
 				except AttributeError:
-					print "Warning!: `%s` is not an attribute of `%s`, falling back to gtk.CellRendererText" % (moduleclass, module)
+					if self.debug: print "Warning!: `%s` is not an attribute of `%s`, falling back to gtk.CellRendererText" % (moduleclass, module)
 					module = gtk
 					moduleclass = getattr(module, 'CellRendererText' )
 				except Exception as e:
-					print "An unexpected error occured, falling back to gtk.CellRendererText %s" % e
+					if self.debug: print "An unexpected error occured, falling back to gtk.CellRendererText %s" % e
 					module = gtk
 					moduleclass = getattr( module, 'CellRendererText' )
 			else:
@@ -389,10 +391,10 @@ class ConfigTreeView( gtk.TreeView ):
 			try:
 				index_map = index_map[index]
 			except KeyError:
-				print "KeyError!:  `%s` is not  defined in 'index_names' at %s" % (index, keys)
+				if self.debug: print "KeyError!:  `%s` is not  defined in 'index_names' at %s" % (index, keys)
 				raise
 			except IndexError:
-				print "IndexError!:  `%s` is too large an index in 'index_names' at %s" % (index, keys)
+				if self.debug: print "IndexError!:  `%s` is too large an index in 'index_names' at %s" % (index, keys)
 				raise
 		return index_map
 
@@ -407,7 +409,7 @@ class ConfigTreeView( gtk.TreeView ):
 				try:
 					widget.set_property( prop, value )
 				except TypeError:
-					print "Warning: [%s] is not a valid property for `%s`, skipping it." % (prop, widget)
+					if self.debug: print "Warning: [%s] is not a valid property for `%s`, skipping it." % (prop, widget)
 
 	def _init_treeview(self):
 		'''
@@ -488,8 +490,9 @@ class ConfigTreeView( gtk.TreeView ):
 			Keyword arguments passed in typical python fashion.
 
 		'''
-		print "Args: ",args
-		print "Kwargs: ",kwargs		
+		if self.debug:
+			print "Args: ",args
+			print "Kwargs: ",kwargs		
 
 	def _evaluate_dotted_key( self, value ):
 		'''
@@ -508,13 +511,13 @@ class ConfigTreeView( gtk.TreeView ):
 				try:
 					idx_map = idx_map[idx]
 				except IndexError:
-					print 'IndexError, Not a valid dotted key: `%s` in "%s"'%(idx,original_value)
+					if self.debug: print 'IndexError, Not a valid dotted key: `%s` in "%s"'%(idx,original_value)
 					raise
 			else:
 				try:
 					idx_map = idx_map[index]
 				except KeyError:
-					print 'KeyError, Not a valid dotted key: `%s` in "%s"' % (index, original_value )
+					if self.debug: print 'KeyError, Not a valid dotted key: `%s` in "%s"' % (index, original_value )
 					raise
 		return idx_map
 
@@ -582,7 +585,7 @@ class ConfigTreeView( gtk.TreeView ):
 				if self.macros.get(prop, None ) is not None:
 					self._set_properties( widget, self.macros[prop] )
 				else:
-					print "Warning: [%s] is not a valid macro, ignoring it." % prop
+					if self.debug: print "Warning: [%s] is not a valid macro, ignoring it." % prop
 
 	def get_treemodel(self):
 		'''
@@ -591,41 +594,55 @@ class ConfigTreeView( gtk.TreeView ):
 		If there is no `treemodel` defined in the config structure, then a ``GtkListStore``
 		is initialized with the types list created from initializing the ConfigTreeView.
 		If a custom ``GtkTreeModel`` is defined in the config structure, then it
-		must have a function ``_handle_args()`` that should assign `args` and `kwargs`,
+		must have a function ``_handle_args`` that should assign args and kwargs,
 		and also any other post initialization stuff.
-		
-		:return:
-			an instance of `GtkTreeModel` that is initialized with
-			the correct `types` array that is generated from the config structure.
-			If a custom treemodel was supplied in the config structure, then this
-			function attempts to create the custom `GtkTreeModel` and initialize
-			it with any arguments supplied in the config structure. If one doesn't
-			exist, then a `GtkListStore` is initialized and returned.
-		
 		'''
 		treemodel_dict = self.config.get('treemodel', {})
-		if treemodel_dict.get('class', None) is not None:
+		if treemodel_dict.get('module', None) is not None:
 			try:
-				treemodel = getattr(sys.modules[__name__], treemodel_dict['class'])
-			except Exception as e:
-				print 'Warning there was an error in get_treemodel:\n%s\nFalling back to GtkListStore' % e
+				custom_class = treemodel_dict.get('class', None)
+				if custom_class is not None:
+					module = __import__(treemodel_dict['module'], globals(), locals(), [custom_class], -1)
+					treemodel = getattr(module, custom_class)
+							
+				else:
+					if self.debug: print 'Warning! `class` is empty or None, falling back to GtkListStore'
+					treemodel = None
+					
+			except ImportError:
+				if self.debug: print 'CustomTreeModelImportWarning!: module `%s` does not exist!, falling back to GtkListStore.' % treemodel_dict.get('module', '')
+				treemodel = None
+			except AttributeError:
+				if self.debug: print 'CustomTreeModelAttributeWarning!: module `%s` does not have an attribute `%s`, falling back to GtkListStore.' % (treemodel_dict.get('module', ''), treemodel_dict.get('class', ''))
 				treemodel = None
 			
 			if treemodel is None:
 				treemodel = gtk.ListStore(*self.types)
 			else:
 				treemodel = treemodel(*self.types)
+				args = treemodel_dict.get('args', [])
+				kwargs = treemodel_dict.get('kwargs', {})
+				#Handle $index mappings
+				for idx, arg in enumerate(args):
+					if isinstance(arg, basestring) and arg.startswith('$index.'):
+						value = self._evaluate_dotted_key(arg)
+						args[idx] = value
+			
+				for key, value in kwargs.iteritems():
+					if isinstance(value, basestring) and value.startswith('$index.'):
+						value = self._evaluate_dotted_key(value)
+						kwargs[key] = value
+			
 				try:
-					treemodel._handle_args(*treemodel_dict.get('args', []), **treemodel_dict.get('kwargs', {}))
+					treemodel._handle_args(*args, **kwargs)
+				except AttributeError:
+					if self.debug: print 'InvalidHandleArgsWarning! Your `%s` doesn\'t have a `_handle_args()` method so your args can not be applied!'
 				except Exception as e:
-					print 'Warning! Thre was an error trying to call _handle_args on the treemodel:\n%s' % e
+					if self.debug: print 'ErrorHandleArgsWarning! There was an error trying to call _handle_args on the treemodel:\n%s' % e	
+				
 		else:
 			treemodel = gtk.ListStore(*self.types)
 		
 		return treemodel
 			
-			
-		
-
-
 
