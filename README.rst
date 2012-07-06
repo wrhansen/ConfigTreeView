@@ -37,21 +37,23 @@ The Why (Why use a ConfigTreeView?)
 
 How to use it
 =============
-	* It's easy! All you need to do is create a config file( either as a python
+	* It's easy! All you need to do is create a config file(either as a python
 	  dict in a .py file or as a JSON file). 
 	* Then with a config file, you're ready to create a ConfigTreeView::
 	
-		from config_treeview import ConfigTreeView
-		#Import the config structure(it's a python dict named config)
-		from myconfigfile import config
-		#Create a ConfigTreeView using config as the configuration structure
-		treeview = ConfigTreeView(config)
-		#Apply the config structure to finish initalizing the TreeView
-		treeview._apply_config()
+		.. code:: python
+		
+			from config_treeview import ConfigTreeView
+			#Import the config structure(it's a python dict named config)
+			from myconfigfile import config
+			#Create a ConfigTreeView using config as the configuration structure
+			treeview = ConfigTreeView(config)
+			#Apply the config structure to finish initalizing the TreeView
+			treeview._apply_config()
 
 For more information
 ====================
 Check out the documentation in the source in the `html/` directory starting with 
 `index.html`
 
-or visit the docs: http://configtreeview.readthedocs.org/en/latest/index.html
+or visit the docs: http://packages.python.org/configtreeview/
