@@ -39,7 +39,7 @@ How to use it
 =============
 	* It's easy! All you need to do is create a config file(either as a python
 	  dict in a .py file or as a JSON file). 
-	* Then with a config file, you're ready to create a ConfigTreeView::
+	* Then with a config file, you're ready to create a ConfigTreeView:
 	
 		.. code:: python
 		
