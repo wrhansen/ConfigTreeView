@@ -1,24 +1,10 @@
 #encoding: utf-8
-"""
-Copyright (C) 2012 Wesley Hansen
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-Contact via email: wes@ridersdiscount.com
-"""
+# Copyright (c) 2012 Wesley Hansen
+# See LICENSE.txt for details.
+# Contact via email: wes@ridersdiscount.com
 
 __author__ = "Wesley Hansen"
-__version__ = "0.1.3.12"
+__version__ = "0.1.32"
 __date__ = "07/6/2012 10:50:22 PM"
 
 
@@ -209,10 +195,9 @@ class ConfigTreeView( gtk.TreeView ):
 	def _init_header( self, col, header ):
 		'''
 		Initialize the GtkTreeViewColumn's header. If this is a custom widget, import the
-		necessary module and classes with the supplied '`module`, `class`, `args`, `kwargs`' 
+		necessary module and classes with the supplied '`module`, `class`, `args`, `kwargs`'
 		keys in the dictionary.  If just 'title' is given, set the title.
 		If a class name is given, but 'module' is None, then default to the gtk module.
-		if 
 		'''
 		#Check for title first
 		#If both title and a custom widget are supplied, create the title first

@@ -1,6 +1,5 @@
-'''
-This module contains the ConfigTreeView and the tools necessary to initialize
-a gtk.TreeView, create a data model, and map the data model to rows
-that can be appended to a gtk.TreeModel
-'''
+#encoding: utf-8
+# Copyright (c) 2012 Wesley Hansen
+# See LICENSE.txt for details.
+# Contact via email: wes@ridersdiscount.com
 from configtreeview import ConfigTreeView
