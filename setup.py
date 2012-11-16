@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from setuptools import setup, find_packages
-
+required = []
 try:
 	import pygtk
 	pygtk.require('2.0')
